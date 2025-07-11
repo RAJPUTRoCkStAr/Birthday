@@ -293,29 +293,29 @@ function App() {
                 </div>
                 
                 {/* Enhanced Candles */}
-                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 flex space-x-6 justify-center">
+                <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 flex space-x-4 justify-center">
                   {[...Array(7)].map((_, i) => (
                     <div key={i} className="relative">
                       {/* Candle */}
-                      <div className={`w-4 h-16 bg-gradient-to-b ${
+                      <div className={`w-3 h-12 bg-gradient-to-b ${
                         i % 3 === 0 ? 'from-yellow-200 to-yellow-500' :
                         i % 3 === 1 ? 'from-pink-200 to-pink-500' :
                         'from-blue-200 to-blue-500'
                       } rounded-full shadow-lg`}></div>
                       {/* Flame */}
                       <div 
-                        className={`absolute -top-4 left-1/2 transform -translate-x-1/2 transition-all duration-700 ${
+                        className={`absolute -top-3 left-1/2 transform -translate-x-1/2 transition-all duration-700 ${
                           candlesBlown ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
                         }`}
                       >
-                        <div className="w-3 h-6 bg-gradient-to-t from-orange-500 via-yellow-400 to-yellow-200 rounded-full animate-flicker shadow-lg"></div>
+                        <div className="w-2 h-4 bg-gradient-to-t from-orange-500 via-yellow-400 to-yellow-200 rounded-full animate-flicker shadow-lg"></div>
                         <div className="absolute inset-0 bg-gradient-to-t from-red-500 via-orange-400 to-yellow-200 rounded-full animate-pulse opacity-70"></div>
                       </div>
                       {/* Enhanced Smoke when blown */}
                       {candlesBlown && (
-                        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-                          <div className="w-2 h-12 bg-gray-400 opacity-70 rounded-full animate-smoke"></div>
-                          <div className="w-1 h-8 bg-gray-300 opacity-50 rounded-full animate-smoke ml-1" style={{animationDelay: '0.2s'}}></div>
+                        <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
+                          <div className="w-1 h-8 bg-gray-400 opacity-70 rounded-full animate-smoke"></div>
+                          <div className="w-1 h-6 bg-gray-300 opacity-50 rounded-full animate-smoke ml-1" style={{animationDelay: '0.2s'}}></div>
                         </div>
                       )}
                     </div>

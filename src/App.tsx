@@ -240,7 +240,7 @@ function App() {
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-400 to-purple-400 rounded-3xl blur-xl opacity-30 animate-pulse-slow scale-110"></div>
                 
                 {/* Bottom Layer - Larger */}
-                <div className={`w-96 h-40 bg-gradient-to-b from-amber-200 to-amber-500 rounded-2xl shadow-2xl relative overflow-hidden transition-all duration-1000 ${
+                <div className={`w-96 h-40 bg-gradient-to-b from-amber-200 to-amber-500 rounded-2xl shadow-2xl relative overflow-hidden transition-all duration-1000 mx-auto ${
                   cakeCut ? 'transform scale-110' : ''
                 }`}>
                   {/* Cake Cut Line */}
@@ -258,7 +258,7 @@ function App() {
                 </div>
                 
                 {/* Middle Layer - Enhanced */}
-                <div className={`w-80 h-36 bg-gradient-to-b from-pink-200 to-pink-500 rounded-2xl shadow-xl relative -mt-6 mx-auto overflow-hidden transition-all duration-1000 ${
+                <div className={`w-80 h-36 bg-gradient-to-b from-pink-200 to-pink-500 rounded-2xl shadow-xl relative -mt-6 overflow-hidden transition-all duration-1000 mx-auto ${
                   cakeCut ? 'transform scale-110' : ''
                 }`}>
                   {/* Cake Cut Line */}
@@ -276,7 +276,7 @@ function App() {
                 </div>
                 
                 {/* Top Layer - Enhanced */}
-                <div className={`w-72 h-32 bg-gradient-to-b from-purple-200 to-purple-500 rounded-2xl shadow-lg relative -mt-6 mx-auto overflow-hidden transition-all duration-1000 ${
+                <div className={`w-72 h-32 bg-gradient-to-b from-purple-200 to-purple-500 rounded-2xl shadow-lg relative -mt-6 overflow-hidden transition-all duration-1000 mx-auto ${
                   cakeCut ? 'transform scale-110' : ''
                 }`}>
                   {/* Cake Cut Line */}

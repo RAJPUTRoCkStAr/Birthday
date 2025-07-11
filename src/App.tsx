@@ -8,6 +8,7 @@ function App() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cakeClicked, setCakeClicked] = useState(false);
+  const [cakeCut, setCakeCut] = useState(false);
   const cakeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ function App() {
   const handleCakeClick = () => {
     console.log('Cake clicked!'); // Debug log
     setCakeClicked(true);
+    setCakeCut(true);
     setCandlesBlown(true);
     setShowConfetti(true);
     
@@ -44,10 +46,11 @@ function App() {
       setCandlesBlown(false);
       setShowConfetti(false);
       setCakeClicked(false);
+      setCakeCut(false);
       if (cakeRef.current) {
         cakeRef.current.classList.remove('animate-shake');
       }
-    }, 4000);
+    }, 6000);
   };
 
   const generateConfetti = () => {
@@ -208,12 +211,46 @@ function App() {
               onClick={handleCakeClick}
             >
               {/* Enhanced Cake Base with Glow Effect */}
+              {/* Lights Off Overlay */}
+              {cakeCut && (
+                <div className="absolute inset-0 bg-black/80 rounded-3xl z-50 animate-fade-in flex items-center justify-center">
+                  <div className="text-center animate-slide-in-up">
+                    <div className="w-64 h-64 bg-gradient-to-br from-pink-200 to-purple-200 rounded-2xl shadow-2xl mb-6 flex items-center justify-center overflow-hidden relative">
+                      <img 
+                        src="https://images.pexels.com/photos/1729931/pexels-photo-1729931.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                        alt="Birthday Memory" 
+                        className="w-full h-full object-cover rounded-2xl animate-zoom-in"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-pink-500/20 to-purple-500/20 rounded-2xl"></div>
+                      <div className="absolute top-4 right-4">
+                        <Heart className="text-red-400 w-8 h-8 animate-heartbeat drop-shadow-lg" />
+                      </div>
+                      <div className="absolute bottom-4 left-4">
+                        <Star className="text-yellow-400 w-6 h-6 animate-spin drop-shadow-lg" />
+                      </div>
+                    </div>
+                    <p className="text-white text-2xl font-bold mb-2 drop-shadow-lg">🎉 Happy Birthday! 🎉</p>
+                    <p className="text-pink-300 text-lg drop-shadow-lg">A special memory just for you! ✨</p>
+                  </div>
+                </div>
+              )}
+              
               <div className="relative">
                 {/* Glow Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-400 to-purple-400 rounded-3xl blur-xl opacity-30 animate-pulse-slow scale-110"></div>
                 
                 {/* Bottom Layer - Larger */}
-                <div className="w-96 h-40 bg-gradient-to-b from-amber-200 to-amber-500 rounded-2xl shadow-2xl relative overflow-hidden">
+                <div className={`w-96 h-40 bg-gradient-to-b from-amber-200 to-amber-500 rounded-2xl shadow-2xl relative overflow-hidden transition-all duration-1000 ${
+                  cakeCut ? 'transform scale-110' : ''
+                }`}>
+                  {/* Cake Cut Line */}
+                  {cakeCut && (
+                    <div className="absolute inset-0 flex">
+                      <div className="w-1/2 h-full bg-gradient-to-b from-amber-200 to-amber-500 animate-slide-left"></div>
+                      <div className="w-1 h-full bg-white shadow-lg animate-pulse"></div>
+                      <div className="w-1/2 h-full bg-gradient-to-b from-amber-200 to-amber-500 animate-slide-right"></div>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
                   <div className="absolute bottom-4 left-6 right-6 h-6 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full shadow-lg"></div>
                   <div className="absolute top-4 left-8 w-8 h-8 bg-gradient-to-r from-red-300 to-pink-300 rounded-full animate-pulse"></div>
@@ -221,7 +258,17 @@ function App() {
                 </div>
                 
                 {/* Middle Layer - Enhanced */}
-                <div className="w-80 h-36 bg-gradient-to-b from-pink-200 to-pink-500 rounded-2xl shadow-xl relative -mt-6 mx-auto overflow-hidden">
+                <div className={`w-80 h-36 bg-gradient-to-b from-pink-200 to-pink-500 rounded-2xl shadow-xl relative -mt-6 mx-auto overflow-hidden transition-all duration-1000 ${
+                  cakeCut ? 'transform scale-110' : ''
+                }`}>
+                  {/* Cake Cut Line */}
+                  {cakeCut && (
+                    <div className="absolute inset-0 flex">
+                      <div className="w-1/2 h-full bg-gradient-to-b from-pink-200 to-pink-500 animate-slide-left"></div>
+                      <div className="w-1 h-full bg-white shadow-lg animate-pulse"></div>
+                      <div className="w-1/2 h-full bg-gradient-to-b from-pink-200 to-pink-500 animate-slide-right"></div>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
                   <div className="absolute bottom-4 left-6 right-6 h-5 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full shadow-lg"></div>
                   <div className="absolute top-6 left-10 w-6 h-6 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-full animate-spin-slow"></div>
@@ -229,7 +276,17 @@ function App() {
                 </div>
                 
                 {/* Top Layer - Enhanced */}
-                <div className="w-72 h-32 bg-gradient-to-b from-purple-200 to-purple-500 rounded-2xl shadow-lg relative -mt-6 mx-auto overflow-hidden">
+                <div className={`w-72 h-32 bg-gradient-to-b from-purple-200 to-purple-500 rounded-2xl shadow-lg relative -mt-6 mx-auto overflow-hidden transition-all duration-1000 ${
+                  cakeCut ? 'transform scale-110' : ''
+                }`}>
+                  {/* Cake Cut Line */}
+                  {cakeCut && (
+                    <div className="absolute inset-0 flex">
+                      <div className="w-1/2 h-full bg-gradient-to-b from-purple-200 to-purple-500 animate-slide-left"></div>
+                      <div className="w-1 h-full bg-white shadow-lg animate-pulse"></div>
+                      <div className="w-1/2 h-full bg-gradient-to-b from-purple-200 to-purple-500 animate-slide-right"></div>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
                   <div className="absolute top-6 left-12 w-5 h-5 bg-gradient-to-r from-pink-300 to-red-300 rounded-full animate-bounce"></div>
                   <div className="absolute top-10 right-14 w-4 h-4 bg-gradient-to-r from-yellow-300 to-pink-300 rounded-full animate-pulse"></div>

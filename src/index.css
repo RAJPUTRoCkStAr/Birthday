@@ -187,9 +187,45 @@
   animation: pulse-fast 1s ease-in-out infinite;
 }
 
+@keyframes slide-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-20px); }
+}
+
+@keyframes slide-right {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(20px); }
+}
+
+@keyframes zoom-in {
+  0% { transform: scale(0.8) rotate(-5deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 .animate-gradient-x {
   animation: gradient-x 3s ease infinite;
   background-size: 200% 200%;
+}
+
+.animate-slide-left {
+  animation: slide-left 1s ease-out forwards;
+}
+
+.animate-slide-right {
+  animation: slide-right 1s ease-out forwards;
+}
+
+.animate-zoom-in {
+  animation: zoom-in 1.5s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
 }
 
 /* Smooth scrolling */

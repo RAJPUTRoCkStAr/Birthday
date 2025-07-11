@@ -9,8 +9,29 @@ function App() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cakeClicked, setCakeClicked] = useState(false);
   const [cakeCut, setCakeCut] = useState(false);
+  const [currentSong, setCurrentSong] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [gameScore, setGameScore] = useState(0);
+  const [activeGame, setActiveGame] = useState<string | null>(null);
+  const [balloonsPoppedCount, setBalloonsPoppedCount] = useState(0);
+  const [wishCount, setWishCount] = useState(0);
   const cakeRef = useRef<HTMLDivElement>(null);
 
+  const birthdaySongs = [
+    { title: "Happy Birthday to You", artist: "Traditional", duration: "0:30" },
+    { title: "Birthday Song", artist: "The Beatles", duration: "2:42" },
+    { title: "Celebration", artist: "Kool & The Gang", duration: "4:56" },
+    { title: "Happy", artist: "Pharrell Williams", duration: "3:53" },
+    { title: "Good as Hell", artist: "Lizzo", duration: "2:39" },
+    { title: "Can't Stop the Feeling", artist: "Justin Timberlake", duration: "3:56" }
+  ];
+
+  const birthdayGames = [
+    { name: "Pop the Balloons", description: "Click to pop birthday balloons!", icon: "🎈" },
+    { name: "Make a Wish", description: "Click the stars to make wishes!", icon: "⭐" },
+    { name: "Catch the Confetti", description: "Catch falling confetti pieces!", icon: "🎊" },
+    { name: "Birthday Bingo", description: "Find birthday-themed items!", icon: "🎯" }
+  ];
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     const handleMouseMove = (e: MouseEvent) => {
@@ -29,6 +50,35 @@ function App() {
     };
   }, []);
 
+  const playNextSong = () => {
+    setCurrentSong((prev) => (prev + 1) % birthdaySongs.length);
+    setIsPlaying(true);
+  };
+
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const playGame = (gameName: string) => {
+    setActiveGame(gameName);
+    setGameScore(0);
+    
+    if (gameName === "Pop the Balloons") {
+      setBalloonsPoppedCount(0);
+    } else if (gameName === "Make a Wish") {
+      setWishCount(0);
+    }
+  };
+
+  const popBalloon = () => {
+    setBalloonsPoppedCount(prev => prev + 1);
+    setGameScore(prev => prev + 10);
+  };
+
+  const makeWish = () => {
+    setWishCount(prev => prev + 1);
+    setGameScore(prev => prev + 5);
+  };
   const handleCakeClick = () => {
     console.log('Cake clicked!'); // Debug log
     setCakeClicked(true);

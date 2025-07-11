@@ -643,7 +643,27 @@ function App() {
               
               {isPlaying && (
                 <div className="text-center text-purple-600 animate-bounce">
-                  🎶 Now Playing... 🎶
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>🎶</span>
+                    <span className="animate-pulse">Now Playing...</span>
+                    <span>🎶</span>
+                  </div>
+                  <div className="mt-2 text-sm">
+                    Click the play button to hear the music! 🔊
+                  </div>
+                </div>
+              )}
+              
+              {!isPlaying && (
+                <div className="text-center text-gray-600">
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>🎵</span>
+                    <span>Ready to play birthday music!</span>
+                    <span>🎵</span>
+                  </div>
+                  <div className="mt-2 text-sm">
+                    Click play to start the celebration! 🎉
+                  </div>
                 </div>
               )}
             </div>

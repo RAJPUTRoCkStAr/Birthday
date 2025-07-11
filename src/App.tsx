@@ -293,7 +293,7 @@ function App() {
                 </div>
                 
                 {/* Enhanced Candles */}
-                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 flex space-x-6">
+                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 flex space-x-6 justify-center">
                   {[...Array(7)].map((_, i) => (
                     <div key={i} className="relative">
                       {/* Candle */}

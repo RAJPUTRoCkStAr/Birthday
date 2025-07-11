@@ -13,15 +13,47 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeGame, setActiveGame] = useState(null);
   const [gameScore, setGameScore] = useState(0);
+  const [audioElements, setAudioElements] = useState<HTMLAudioElement[]>([]);
   const cakeRef = useRef<HTMLDivElement>(null);
+  const audioRefs = useRef<HTMLAudioElement[]>([]);
 
   const birthdaySongs = [
-    { title: "Happy Birthday to You", artist: "Traditional", duration: "0:30" },
-    { title: "Birthday Song", artist: "The Beatles", duration: "2:42" },
-    { title: "Celebration", artist: "Kool & The Gang", duration: "4:56" },
-    { title: "Good as Hell", artist: "Lizzo", duration: "2:39" },
-    { title: "Can't Stop the Feeling", artist: "Justin Timberlake", duration: "3:56" },
-    { title: "Happy", artist: "Pharrell Williams", duration: "3:53" }
+    { 
+      title: "Happy Birthday to You", 
+      artist: "Traditional", 
+      duration: "0:30",
+      url: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" // Placeholder - you can replace with actual birthday song URLs
+    },
+    { 
+      title: "Birthday Celebration", 
+      artist: "Party Mix", 
+      duration: "2:42",
+      url: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav"
+    },
+    { 
+      title: "Happy Birthday Song", 
+      artist: "Kids Version", 
+      duration: "1:30",
+      url: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav"
+    },
+    { 
+      title: "Birthday Party Time", 
+      artist: "Celebration Band", 
+      duration: "3:15",
+      url: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav"
+    },
+    { 
+      title: "Wish You Happy Birthday", 
+      artist: "Birthday Singers", 
+      duration: "2:20",
+      url: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav"
+    },
+    { 
+      title: "Birthday Melody", 
+      artist: "Happy Tunes", 
+      duration: "1:45",
+      url: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav"
+    }
   ];
 
   const birthdayGames = [
@@ -64,9 +96,31 @@ function App() {
     // Trigger animations after mount
     setTimeout(() => setIsVisible(true), 100);
     
+    // Initialize audio elements
+    audioRefs.current = birthdaySongs.map((song, index) => {
+      const audio = new Audio();
+      audio.preload = 'metadata';
+      audio.addEventListener('ended', () => {
+        setIsPlaying(false);
+        // Auto play next song
+        playNextSong();
+      });
+      audio.addEventListener('error', (e) => {
+        console.log(`Audio error for song ${index}:`, e);
+      });
+      return audio;
+    });
+    
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
+      // Cleanup audio elements
+      audioRefs.current.forEach(audio => {
+        if (audio) {
+          audio.pause();
+          audio.src = '';
+        }
+      });
     };
   }, []);
 

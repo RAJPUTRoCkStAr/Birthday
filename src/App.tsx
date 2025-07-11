@@ -11,27 +11,47 @@ function App() {
   const [cakeCut, setCakeCut] = useState(false);
   const [currentSong, setCurrentSong] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [activeGame, setActiveGame] = useState(null);
   const [gameScore, setGameScore] = useState(0);
-  const [activeGame, setActiveGame] = useState<string | null>(null);
-  const [balloonsPoppedCount, setBalloonsPoppedCount] = useState(0);
-  const [wishCount, setWishCount] = useState(0);
   const cakeRef = useRef<HTMLDivElement>(null);
 
   const birthdaySongs = [
     { title: "Happy Birthday to You", artist: "Traditional", duration: "0:30" },
     { title: "Birthday Song", artist: "The Beatles", duration: "2:42" },
     { title: "Celebration", artist: "Kool & The Gang", duration: "4:56" },
-    { title: "Happy", artist: "Pharrell Williams", duration: "3:53" },
     { title: "Good as Hell", artist: "Lizzo", duration: "2:39" },
-    { title: "Can't Stop the Feeling", artist: "Justin Timberlake", duration: "3:56" }
+    { title: "Can't Stop the Feeling", artist: "Justin Timberlake", duration: "3:56" },
+    { title: "Happy", artist: "Pharrell Williams", duration: "3:53" }
   ];
 
   const birthdayGames = [
-    { name: "Pop the Balloons", description: "Click to pop birthday balloons!", icon: "🎈" },
-    { name: "Make a Wish", description: "Click the stars to make wishes!", icon: "⭐" },
-    { name: "Catch the Confetti", description: "Catch falling confetti pieces!", icon: "🎊" },
-    { name: "Birthday Bingo", description: "Find birthday-themed items!", icon: "🎯" }
+    { name: "Pop the Balloons", icon: "🎈", description: "Pop colorful balloons for points!" },
+    { name: "Make a Wish", icon: "⭐", description: "Collect shooting stars!" },
+    { name: "Catch the Confetti", icon: "🎊", description: "Catch falling confetti!" },
+    { name: "Birthday Bingo", icon: "🎯", description: "Match birthday symbols!" }
   ];
+
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const playNextSong = () => {
+    setCurrentSong(prev => prev === birthdaySongs.length - 1 ? 0 : prev + 1);
+  };
+
+  const playGame = (gameName) => {
+    setActiveGame(gameName);
+    setGameScore(0);
+  };
+
+  const popBalloon = () => {
+    setGameScore(prev => prev + 10);
+  };
+
+  const makeWish = () => {
+    setGameScore(prev => prev + 5);
+  };
+
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     const handleMouseMove = (e: MouseEvent) => {
@@ -50,35 +70,6 @@ function App() {
     };
   }, []);
 
-  const playNextSong = () => {
-    setCurrentSong((prev) => (prev + 1) % birthdaySongs.length);
-    setIsPlaying(true);
-  };
-
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const playGame = (gameName: string) => {
-    setActiveGame(gameName);
-    setGameScore(0);
-    
-    if (gameName === "Pop the Balloons") {
-      setBalloonsPoppedCount(0);
-    } else if (gameName === "Make a Wish") {
-      setWishCount(0);
-    }
-  };
-
-  const popBalloon = () => {
-    setBalloonsPoppedCount(prev => prev + 1);
-    setGameScore(prev => prev + 10);
-  };
-
-  const makeWish = () => {
-    setWishCount(prev => prev + 1);
-    setGameScore(prev => prev + 5);
-  };
   const handleCakeClick = () => {
     console.log('Cake clicked!'); // Debug log
     setCakeClicked(true);
@@ -500,8 +491,8 @@ function App() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { icon: Gamepad2, title: "Play Games", desc: "Level up your birthday fun!", color: "from-blue-400 to-purple-400" },
-              { icon: Music, title: "Dance Party", desc: "Move to your favorite beats!", color: "from-pink-400 to-red-400" },
+              { icon: Gamepad2, title: "Birthday Games", desc: "Play fun birthday games!", color: "from-blue-400 to-purple-400", isInteractive: true, type: "games" },
+              { icon: Music, title: "Birthday Music", desc: "Listen to birthday songs!", color: "from-pink-400 to-red-400", isInteractive: true, type: "music" },
               { icon: Book, title: "Story Time", desc: "Create new birthday memories!", color: "from-green-400 to-blue-400" },
               { icon: Palette, title: "Art & Craft", desc: "Express your creativity!", color: "from-yellow-400 to-orange-400" },
               { icon: Coffee, title: "Sweet Treats", desc: "Indulge in birthday goodies!", color: "from-brown-400 to-yellow-400" },
@@ -511,16 +502,246 @@ function App() {
             ].map((activity, i) => (
               <div
                 key={i}
-                className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 hover:-rotate-2 transition-all duration-500 animate-fade-in-up cursor-pointer group"
+                className={`bg-white/90 backdrop-blur-lg rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 hover:-rotate-2 transition-all duration-500 animate-fade-in-up cursor-pointer group ${
+                  activity.isInteractive ? 'border-2 border-purple-300 hover:border-purple-500' : ''
+                }`}
                 style={{ animationDelay: `${i * 0.1}s` }}
+                onClick={() => {
+                  if (activity.type === 'games') {
+                    // Show games modal or section
+                    document.getElementById('games-section')?.scrollIntoView({ behavior: 'smooth' });
+                  } else if (activity.type === 'music') {
+                    // Show music player or section
+                    document.getElementById('music-section')?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
               >
                 <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${activity.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                   <activity.icon className="text-white w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-600 transition-colors duration-300">{activity.title}</h3>
                 <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">{activity.desc}</p>
+                {activity.isInteractive && (
+                  <div className="mt-4 text-sm text-purple-600 font-semibold animate-pulse">
+                    Click to explore! ✨
+                  </div>
+                )}
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Birthday Music Player Section */}
+      <section id="music-section" className="py-40 bg-gradient-to-r from-purple-100 to-pink-100 relative">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-24">
+            <h2 className="text-6xl md:text-8xl font-black text-gray-800 mb-8 animate-slide-in-right drop-shadow-lg">
+              🎵 Birthday Playlist 🎵
+            </h2>
+            <div className="w-40 h-3 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto animate-expand rounded-full"></div>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            {/* Music Player */}
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 shadow-2xl mb-12 border border-white/30">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-4">
+                  <div className="w-16 h-16 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full flex items-center justify-center animate-spin-slow">
+                    <Music className="text-white w-8 h-8" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-800">{birthdaySongs[currentSong].title}</h3>
+                    <p className="text-gray-600">{birthdaySongs[currentSong].artist}</p>
+                  </div>
+                </div>
+                <div className="text-purple-600 font-bold text-lg">
+                  {birthdaySongs[currentSong].duration}
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-center space-x-6 mb-6">
+                <button 
+                  onClick={() => setCurrentSong(prev => prev === 0 ? birthdaySongs.length - 1 : prev - 1)}
+                  className="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg"
+                >
+                  ⏮️
+                </button>
+                <button 
+                  onClick={togglePlayPause}
+                  className="w-16 h-16 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg text-2xl"
+                >
+                  {isPlaying ? '⏸️' : '▶️'}
+                </button>
+                <button 
+                  onClick={playNextSong}
+                  className="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg"
+                >
+                  ⏭️
+                </button>
+              </div>
+              
+              <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+                <div className={`bg-gradient-to-r from-pink-400 to-purple-400 h-2 rounded-full transition-all duration-1000 ${
+                  isPlaying ? 'w-3/4 animate-pulse' : 'w-1/4'
+                }`}></div>
+              </div>
+              
+              {isPlaying && (
+                <div className="text-center text-purple-600 animate-bounce">
+                  🎶 Now Playing... 🎶
+                </div>
+              )}
+            </div>
+            
+            {/* Song List */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {birthdaySongs.map((song, i) => (
+                <div
+                  key={i}
+                  onClick={() => setCurrentSong(i)}
+                  className={`bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 cursor-pointer border-2 ${
+                    currentSong === i ? 'border-purple-400 bg-purple-50/80' : 'border-transparent'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-gray-800 text-lg">{song.title}</h4>
+                      <p className="text-gray-600">{song.artist}</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className="text-purple-600 font-semibold">{song.duration}</span>
+                      {currentSong === i && isPlaying && (
+                        <div className="w-6 h-6 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full animate-pulse"></div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Birthday Games Section */}
+      <section id="games-section" className="py-40 bg-gradient-to-r from-blue-100 to-green-100 relative">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-24">
+            <h2 className="text-6xl md:text-8xl font-black text-gray-800 mb-8 animate-slide-in-left drop-shadow-lg">
+              🎮 Birthday Games 🎮
+            </h2>
+            <div className="w-40 h-3 bg-gradient-to-r from-blue-500 to-green-500 mx-auto animate-expand rounded-full"></div>
+          </div>
+          
+          <div className="max-w-6xl mx-auto">
+            {/* Game Selection */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+              {birthdayGames.map((game, i) => (
+                <div
+                  key={i}
+                  onClick={() => playGame(game.name)}
+                  className={`bg-white/90 backdrop-blur-lg rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-500 cursor-pointer border-2 ${
+                    activeGame === game.name ? 'border-blue-400 bg-blue-50/80' : 'border-transparent'
+                  }`}
+                >
+                  <div className="text-6xl mb-4 text-center animate-bounce">{game.icon}</div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-3 text-center">{game.name}</h3>
+                  <p className="text-gray-600 text-center">{game.description}</p>
+                  {activeGame === game.name && (
+                    <div className="mt-4 text-center">
+                      <div className="text-2xl font-bold text-blue-600">Score: {gameScore}</div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            {/* Active Game Area */}
+            {activeGame && (
+              <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-12 shadow-2xl border border-white/30">
+                <div className="text-center mb-8">
+                  <h3 className="text-4xl font-bold text-gray-800 mb-4">🎯 {activeGame} 🎯</h3>
+                  <div className="text-3xl font-bold text-blue-600 mb-4">Score: {gameScore}</div>
+                </div>
+                
+                {activeGame === "Pop the Balloons" && (
+                  <div className="grid grid-cols-4 md:grid-cols-6 gap-4 max-w-2xl mx-auto">
+                    {[...Array(24)].map((_, i) => (
+                      <div
+                        key={i}
+                        onClick={popBalloon}
+                        className="w-16 h-20 bg-gradient-to-b from-red-300 to-red-500 rounded-full cursor-pointer hover:scale-110 transition-transform duration-300 shadow-lg flex items-center justify-center text-2xl animate-float-0"
+                        style={{ animationDelay: `${i * 0.1}s` }}
+                      >
+                        🎈
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {activeGame === "Make a Wish" && (
+                  <div className="grid grid-cols-5 md:grid-cols-8 gap-4 max-w-3xl mx-auto">
+                    {[...Array(40)].map((_, i) => (
+                      <div
+                        key={i}
+                        onClick={makeWish}
+                        className="w-12 h-12 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full cursor-pointer hover:scale-125 transition-transform duration-300 shadow-lg flex items-center justify-center text-xl animate-pulse"
+                        style={{ animationDelay: `${i * 0.05}s` }}
+                      >
+                        ⭐
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {activeGame === "Catch the Confetti" && (
+                  <div className="relative h-96 bg-gradient-to-b from-blue-100 to-purple-100 rounded-2xl overflow-hidden">
+                    <div className="absolute inset-0">
+                      {[...Array(20)].map((_, i) => (
+                        <div
+                          key={i}
+                          className="absolute w-4 h-4 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full animate-confetti cursor-pointer hover:scale-150 transition-transform duration-300"
+                          style={{
+                            left: `${Math.random() * 90}%`,
+                            animationDelay: `${Math.random() * 3}s`,
+                            animationDuration: `${2 + Math.random() * 2}s`
+                          }}
+                          onClick={() => setGameScore(prev => prev + 15)}
+                        >
+                          🎊
+                        </div>
+                      ))}
+                    </div>
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-2xl">
+                      🧺
+                    </div>
+                  </div>
+                )}
+                
+                {activeGame === "Birthday Bingo" && (
+                  <div className="grid grid-cols-5 gap-4 max-w-2xl mx-auto">
+                    {['🎂', '🎈', '🎁', '🎉', '🎊', '🕯️', '🎵', '🌟', '💖', '🎯', '🎪', '🎭', '🎨', '🎸', '🎤', '🎬', '📸', '🎳', '🎲', '🃏', '🎪', '🎠', '🎡', '🎢', '🎪'].map((emoji, i) => (
+                      <div
+                        key={i}
+                        onClick={() => setGameScore(prev => prev + 20)}
+                        className="w-16 h-16 bg-white rounded-xl shadow-lg cursor-pointer hover:scale-110 transition-transform duration-300 flex items-center justify-center text-2xl border-2 border-gray-200 hover:border-purple-400"
+                      >
+                        {emoji}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                <div className="text-center mt-8">
+                  <button
+                    onClick={() => setActiveGame(null)}
+                    className="bg-gradient-to-r from-purple-400 to-pink-400 text-white px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform duration-300 shadow-lg"
+                  >
+                    Choose Another Game 🎮
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
